@@ -68,10 +68,11 @@ app.post("/api/users", (req, res) => {
 // getting all user from the database
 app.get("/api/users", (req, res) => {
   User.find({})
+    .select("username _id")
     .then((users) => {
-      return res.json({ users: users });
+      res.send(users);
     })
     .catch((error) => {
-      return res.status(error.status);
+      res.status(error.status);
     });
 });
