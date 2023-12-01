@@ -93,10 +93,8 @@ app.get("/api/users", (req, res) => {
 app.post("/api/users/:_id/exercises", async (req, res) => {
   console.log(req.params._id);
   if (!req.params._id) res.json({ status: "Invalid request" });
-  const username = await User.findOne({ _id: req.params._id });
-  console.log(username);
+  const username = await User.findOne({ _id: req.params._id }).username;
 
-  console.log(req.body);
   if (!req.body.description || !req.body.duration) {
     return res.json({ status: "Invalid request" });
   }
