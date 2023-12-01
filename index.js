@@ -42,7 +42,7 @@ app.post("/api/users", (req, res) => {
   } else {
     User.findOne({ user: req.body.username }).then((user) => {
       if (!user) {
-        const newUser = { username: req.body.username };
+        const newUser = new User({ username: req.body.username });
         newUser
           .save()
           .then((user) => {
