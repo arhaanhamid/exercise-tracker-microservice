@@ -93,7 +93,10 @@ app.get("/api/users", (req, res) => {
 app.post("/api/users/:_id/exercises", async (req, res) => {
   console.log(req.params._id);
   if (!req.params._id) res.json({ status: "Invalid request id" });
+
   const user = await User.findOne({ _id: req.params._id });
+  if (!user) res.json({ status: "User not found" });
+  console.log(user);
 
   if (!req.body.description || !req.body.duration) {
     return res.json({ status: "Invalid request body" });
@@ -113,6 +116,6 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
       res.json(exercise);
     })
     .catch((err) => {
-      res.json({ status: "Invalid request" });
+      res.json({ status: err });
     });
 });
