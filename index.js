@@ -96,10 +96,9 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
 
   const user = await User.findOne({ _id: req.params._id });
   if (!user) res.json({ status: "User not found" });
-  console.log(user);
 
   if (!req.body.description || !req.body.duration) {
-    return res.json({ status: "Invalid request body" });
+    return res.json({ status: "request descriptionp or duration missing..." });
   }
 
   const exercise = new Exercise({
@@ -110,12 +109,16 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
     _id: req.params._id,
   });
 
+  console.log("Exercise");
+  console.log(exercise);
+
   exercise
     .save()
     .then((exercise) => {
       res.json(exercise);
     })
     .catch((err) => {
-      res.json({ status: err });
+      console.log(err);
+      return res.json({ status: "Invalid request body" });
     });
 });
