@@ -88,3 +88,35 @@ app.get("/api/users", (req, res) => {
       res.status(error.status);
     });
 });
+
+// adding data to users exercise
+app.post("/api/users/:_id/exercises", async (req, res) => {
+  console.log(req.params._id);
+  if (!req.params._id) res.json({ status: "Invalid request" });
+  const username = await User.findOne({ _id: req.params._id }).select(
+    "username"
+  ).username;
+  console.log(username);
+
+  console.log(req.body);
+  if (!req.body.description || !req.body.duration) {
+    return res.json({ status: "Invalid request" });
+  }
+
+  const exercise = new Exercise({
+    username: username,
+    description: req.body.description,
+    duration: req.body.duration,
+    date: req.body.date ? req.body.date : new Date(),
+    _id: req.params._id,
+  });
+
+  exercise
+    .save()
+    .then((exercise) => {
+      res.json(exercise);
+    })
+    .catch((err) => {
+      res.json({ status: "Invalid request" });
+    });
+});
