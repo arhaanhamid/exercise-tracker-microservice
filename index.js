@@ -67,7 +67,7 @@ app.post("/api/users", (req, res) => {
 
 // getting all user from the database
 app.get("/api/users", (req, res) => {
-  User.findOne({})
+  User.find({})
     .then((users) => {
       return res.json({ users: users });
     })
