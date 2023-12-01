@@ -5,11 +5,12 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
-mongoose.connect(process.env.MONGO_URI).then(() => {
-  const listener = app.listen(process.env.PORT || 3000, () => {
-    console.log("Your app is listening on port " + listener.address().port);
-  });
-});
+// mongoose.connect(process.env.MONGO_URI).then(() => {
+//   const listener = app.listen(process.env.PORT || 3000, () => {
+//     console.log("Your app is listening on port " + listener.address().port);
+//   });
+// });
+mongoose.connect(process.env.MONGO_URI);
 
 mongoose.connection.on("connected", () => {
   console.log("Connected to MongoDB Atlas");
@@ -58,4 +59,8 @@ app.post("/api/users", (req, res) => {
       }
     });
   }
+});
+
+const listener = app.listen(process.env.PORT || 3000, () => {
+  console.log("Your app is listening on port " + listener.address().port);
 });
