@@ -151,7 +151,7 @@ app.get("/api/users/:_id/logs", (req, res) => {
 
       const fromDate = getDate(req.query.from);
       const toDate = getDate(req.query.to);
-      const limit = Number(req.query.limit);
+      const limit = Number(req.query.limit ? req.query.limit : 0);
       const logs = user.log;
 
       const filteredLogs = logs.filter((log) =>
@@ -161,7 +161,10 @@ app.get("/api/users/:_id/logs", (req, res) => {
           ? new Date(log.date) <= toDate
           : ""
       );
-      const limitedLogs = limit ? filteredLogs.slice(0, limit) : filteredLogs;
+
+      console.log(filteredLogs);
+      const limitedLogs =
+        limit > 0 ? filteredLogs.slice(0, limit) : filteredLogs;
 
       user.log = limitedLogs;
 
