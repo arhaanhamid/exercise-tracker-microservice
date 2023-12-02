@@ -93,15 +93,18 @@ app.get("/api/users", (req, res) => {
 
 // adding data to users exercise
 app.post("/api/users/:_id/exercises", async (req, res) => {
+  // check if id present or not
   if (!req.params._id) res.json({ status: "Invalid request id" });
 
+  // check if description and duration present or not
   if (!req.body.description || !req.body.duration)
     res.json({ status: "request descriptionp or duration missing..." });
 
-  // UPDATE USER
+  // find and update user with exercise and log details
   User.findByIdAndUpdate(req.params._id)
     .exec()
     .then((user) => {
+      // check if user exists or not
       if (!user) return res.json({ status: "User not found" });
 
       const exerciseObject = {
@@ -111,14 +114,13 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
           ? new Date(req.body.date).toDateString()
           : new Date().toDateString(),
       };
-      console.log(user);
+
       user.description = exerciseObject.description;
       user.duration = exerciseObject.duration;
       user.date = exerciseObject.date;
       user.log.push(exerciseObject);
+      user.count = user.count + 1;
 
-      console.log("user after update");
-      console.log(user);
       user
         .save()
         .then((user) => {
@@ -139,26 +141,22 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
           res.json({ status: "User not found" });
         });
     });
-  // const exercise = new Exercise({
-  //   username: user.username,
-  //   description: req.body.description,
-  //   duration: req.body.duration,
-  //   date: req.body.date
-  //     ? new Date(req.body.date).toDateString()
-  //     : new Date().toDateString(),
-  //   _id: req.params._id,
-  // });
+});
 
-  // console.log("Exercise");
-  // console.log(exercise);
+app.get("/api/user/:id/logs", (req, res) => {
+  // check if id present or not
+  if (!req.params._id) res.json({ status: "Invalid request id" });
 
-  // exercise
-  //   .save()
-  //   .then((exercise) => {
-  //     res.json(exercise);
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //     return res.json({ status: "Invalid request body" });
-  //   });
+  User.findById(req.params._id)
+    .select("count log")
+    .then((user) => {
+      // check if user exists or not
+      if (!user) return res.json({ status: "User not found" });
+
+      res.json(user);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.json({ status: "User not found" });
+    });
 });
