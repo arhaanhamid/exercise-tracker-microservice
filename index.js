@@ -112,11 +112,14 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
           : new Date().toDateString(),
       };
       console.log(user);
-      user = {
-        ...user,
-        ...exerciseObject,
-        log: [...user.log, exerciseObject],
-      }
+      user.description = exerciseObject.description;
+      user.duration = exerciseObject.duration;
+      user.date = exerciseObject.date;
+      user.log.push(exerciseObject);
+
+      console.log("user after update");
+      console.log(user);
+      user
         .save()
         .then((user) => {
           res
