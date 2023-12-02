@@ -111,17 +111,17 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
     .then((user) => {
       user.description = req.body.description;
       user.duration = req.body.duration;
-      user
-        .save()
-        .then((user) => {
-          res.json({
-            username: user.username,
-            _id: user._id,
+      (user.date = req.body.date
+        ? new Date(req.body.date).toDateString()
+        : new Date().toDateString()),
+        user
+          .save()
+          .then((user) => {
+            res.json(user.select("_id username description duration date"));
+          })
+          .catch((error) => {
+            console.log(error);
           });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
     })
     .catch((error) => {
       console.log(error);
