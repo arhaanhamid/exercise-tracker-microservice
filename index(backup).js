@@ -21,23 +21,21 @@ mongoose.connection.on("error", (err) => {
 
 //USER schema and model
 const userSchema = new mongoose.Schema({
-  _id: String,
   username: String,
-  description: String,
-  duration: Number,
-  date: String,
-  username: "fcc_test",
-  count: Number,
-  log: [
-    {
-      description: String,
-      duration: Number,
-      date: String,
-    },
-  ],
 });
 
 const User = mongoose.model("User", userSchema);
+
+//EXERCISE schema and model
+const exerciseSchema = new mongoose.Schema({
+  username: String,
+  description: String,
+  duration: String,
+  date: String,
+  _id: String,
+});
+
+const Exercise = mongoose.model("Exercise", exerciseSchema);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -56,7 +54,7 @@ app.post("/api/users", (req, res) => {
     return res.json({ status: "Invalid user" });
   } else {
     // check if the user already exists
-    User.findOne({ username: req.body.username }).then((user) => {
+    User.findOne({ user: req.body.username }).then((user) => {
       // create a new user if not exists
       if (!user) {
         const newUser = new User({ username: req.body.username });

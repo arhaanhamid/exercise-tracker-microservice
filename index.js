@@ -21,21 +21,23 @@ mongoose.connection.on("error", (err) => {
 
 //USER schema and model
 const userSchema = new mongoose.Schema({
+  _id: String,
   username: String,
+  description: String,
+  duration: Number,
+  date: String,
+  username: "fcc_test",
+  count: Number,
+  log: [
+    {
+      description: String,
+      duration: Number,
+      date: String,
+    },
+  ],
 });
 
 const User = mongoose.model("User", userSchema);
-
-//EXERCISE schema and model
-const exerciseSchema = new mongoose.Schema({
-  username: String,
-  description: String,
-  duration: String,
-  date: String,
-  _id: String,
-});
-
-const Exercise = mongoose.model("Exercise", exerciseSchema);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -54,7 +56,7 @@ app.post("/api/users", (req, res) => {
     return res.json({ status: "Invalid user" });
   } else {
     // check if the user already exists
-    User.findOne({ user: req.body.username }).then((user) => {
+    User.findOne({ username: req.body.username }).then((user) => {
       // create a new user if not exists
       if (!user) {
         const newUser = new User({ username: req.body.username });
@@ -94,33 +96,43 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
   console.log(req.params._id);
   if (!req.params._id) res.json({ status: "Invalid request id" });
 
-  const user = await User.findOne({ _id: req.params._id });
-  if (!user) res.json({ status: "User not found" });
-
   if (!req.body.description || !req.body.duration) {
     return res.json({ status: "request descriptionp or duration missing..." });
   }
 
-  const exercise = new Exercise({
-    username: user.username,
-    description: req.body.description,
-    duration: req.body.duration,
-    date: req.body.date
-      ? new Date(req.body.date).toDateString()
-      : new Date().toDateString(),
-    _id: req.params._id,
-  });
-
-  console.log("Exercise");
-  console.log(exercise);
-
-  exercise
-    .save()
-    .then((exercise) => {
-      res.json(exercise);
+  // const user = await User.findById(req.params._id);
+  // if (!user) res.json({ status: "User not found" });
+  // UPDATE USER
+  User.findByIdAndUpdate(req.params._id)
+    .then((user) => {
+      user.description = req.body.description;
+      user.duration = req.body.duration;
     })
-    .catch((err) => {
-      console.log(err);
-      return res.json({ status: "Invalid request body" });
+    .catch((error) => {
+      console.log(error);
+      res.json({ status: "User not found" });
     });
+
+  // const exercise = new Exercise({
+  //   username: user.username,
+  //   description: req.body.description,
+  //   duration: req.body.duration,
+  //   date: req.body.date
+  //     ? new Date(req.body.date).toDateString()
+  //     : new Date().toDateString(),
+  //   _id: req.params._id,
+  // });
+
+  // console.log("Exercise");
+  // console.log(exercise);
+
+  // exercise
+  //   .save()
+  //   .then((exercise) => {
+  //     res.json(exercise);
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //     return res.json({ status: "Invalid request body" });
+  //   });
 });
