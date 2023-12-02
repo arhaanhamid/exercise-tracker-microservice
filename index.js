@@ -156,9 +156,9 @@ app.get("/api/users/:_id/logs", (req, res) => {
 
       const filteredLogs = logs.filter(
         (log) =>
-          fromDate &&
+          fromDate !== null &&
           new Date(log.date) >= fromDate &&
-          toDate &&
+          toDate !== null &&
           new Date(log.date) <= toDate
       );
 
