@@ -30,6 +30,7 @@ const userSchema = new mongoose.Schema({
   count: Number,
   log: [
     {
+      _id: false,
       description: String,
       duration: Number,
       date: String,
@@ -148,7 +149,7 @@ app.get("/api/users/:_id/logs", (req, res) => {
   if (!req.params._id) res.json({ status: "Invalid request id" });
 
   User.findById(req.params._id)
-    .select("count log")
+    .select("count log username")
     .then((user) => {
       // check if user exists or not
       if (!user) return res.json({ status: "User not found" });
