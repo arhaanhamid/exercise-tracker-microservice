@@ -95,26 +95,38 @@ app.get("/api/users", (req, res) => {
 app.post("/api/users/:_id/exercises", async (req, res) => {
   if (!req.params._id) res.json({ status: "Invalid request id" });
 
-  if (!req.body.description || !req.body.duration) {
-    return res.json({ status: "request descriptionp or duration missing..." });
-  }
+  if (!req.body.description || !req.body.duration)
+    res.json({ status: "request descriptionp or duration missing..." });
 
   const user = await User.findById(req.params._id);
   if (!user) res.json({ status: "User not found" });
+
   console.log(user);
-  user.description = req.body.description;
-  user.duration = req.body.duration;
+  // user.description = req.body.description;
+  // user.duration = req.body.duration;
+  // console.log(user);
 
   // UPDATE USER
-  // User.findByIdAndUpdate(req.params._id)
-  //   .then((user) => {
-  //     user.description = req.body.description;
-  //     user.duration = req.body.duration;
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //     res.json({ status: "User not found" });
-  //   });
+  User.findByIdAndUpdate(req.params._id)
+    .then((user) => {
+      user.description = req.body.description;
+      user.duration = req.body.duration;
+      user
+        .save()
+        .then((user) => {
+          res.json({
+            username: user.username,
+            _id: user._id,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      res.json({ status: "User not found" });
+    });
 
   // const exercise = new Exercise({
   //   username: user.username,
