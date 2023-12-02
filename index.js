@@ -164,7 +164,8 @@ app.get("/api/users/:_id/logs", (req, res) => {
       const filteredLogs = logs.filter(
         (log) => new Date(log.date) >= fromDate && new Date(log.date) <= toDate
       );
-      console.log(filteredLogs);
+      const limitedLogs = limit ? filteredLogs.slice(0, limit) : filteredLogs;
+      console.log(limitedLogs);
     })
     .catch((error) => {
       console.log(error);
