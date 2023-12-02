@@ -108,30 +108,35 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
 
   // UPDATE USER
   User.findByIdAndUpdate(req.params._id).then((user) => {
-    user.description = req.body.description;
-    user.duration = req.body.duration;
-    (user.date = req.body.date
-      ? new Date(req.body.date).toDateString()
-      : new Date().toDateString()),
-      user
-        .save()
-        .then((user) => {
-          res
-            .json({
-              _id: user._id,
-              username: user.username,
-              description: user.description,
-              duration: user.duration,
-              date: user.date,
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        })
-        .catch((error) => {
-          console.log(error);
-          res.json({ status: "User not found" });
-        });
+    const exerciseObject = {
+      description: req.body.description,
+      duration: req.body.duration,
+      date: req.body.date
+        ? new Date(req.body.date).toDateString()
+        : new Date().toDateString(),
+    };
+
+    user = { ...user, ...exerciseObject, log: user.log.push(exerciseObject) };
+
+    user
+      .save()
+      .then((user) => {
+        res
+          .json({
+            _id: user._id,
+            username: user.username,
+            description: user.description,
+            duration: user.duration,
+            date: user.date,
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json({ status: "User not found" });
+      });
   });
   // const exercise = new Exercise({
   //   username: user.username,
