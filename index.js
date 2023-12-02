@@ -139,7 +139,7 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
     });
 });
 
-app.get("/api/users/:_id/logs?[from][&to][&limit]", (req, res) => {
+app.get("/api/users/:_id/logs", (req, res) => {
   // check if id present or not
   if (!req.params._id) res.json({ status: "Invalid request id" });
 
