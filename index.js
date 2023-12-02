@@ -148,8 +148,8 @@ app.get("/api/users/:_id/logs", (req, res) => {
   // check if id present or not
   if (!req.params._id) res.json({ status: "Invalid request id" });
 
+  // .select("count log username -_id")
   User.findById(req.params._id)
-    .select("count log username")
     .then((user) => {
       // check if user exists or not
       if (!user) return res.json({ status: "User not found" });
