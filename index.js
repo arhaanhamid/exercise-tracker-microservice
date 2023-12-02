@@ -139,17 +139,27 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
     });
 });
 
-app.get("/api/users/:_id/logs", (req, res) => {
+app.get("/api/users/:_id/logs?[from][&to][&limit]", (req, res) => {
   // check if id present or not
   if (!req.params._id) res.json({ status: "Invalid request id" });
 
-  // .select("count log username -_id")
+  // find user to get logs
   User.findById(req.params._id)
     .then((user) => {
       // check if user exists or not
       if (!user) return res.json({ status: "User not found" });
 
       res.json(user);
+
+      const fromDate = new Date(req.query.from);
+      const toDate = new Date(req.query.to);
+      const limit = Number(req.query.limit);
+      const logs = user.log;
+
+      console.log(fromDate);
+      console.log(toDate);
+      console.log(limit);
+      console.log(logs);
     })
     .catch((error) => {
       console.log(error);
