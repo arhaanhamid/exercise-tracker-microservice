@@ -115,13 +115,15 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
         ? new Date(req.body.date).toDateString()
         : new Date().toDateString(),
     };
-
+    console.log(user);
     user = {
       ...user,
       ...exerciseObject,
       log: [...user.log, exerciseObject],
     };
 
+    console.log("user after update");
+    console.log(user);
     user
       .save()
       .then((user) => {
