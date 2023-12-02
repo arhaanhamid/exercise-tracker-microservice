@@ -116,7 +116,7 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
         : new Date().toDateString(),
     };
 
-    user = { ...user, ...exerciseObject, log: user.log.push(exerciseObject) };
+    user = { ...user, ...exerciseObject, log: log.push(exerciseObject) };
 
     user
       .save()
