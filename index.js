@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
   description: String,
   duration: Number,
   date: String,
-  username: "fcc_test",
+  username: String,
   count: Number,
   log: [
     {
