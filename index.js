@@ -119,7 +119,7 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
     user = {
       ...user,
       ...exerciseObject,
-      log: [...user.log, ...exerciseObject],
+      log: [...user.log, exerciseObject],
     };
 
     user
