@@ -116,11 +116,7 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
         ...user,
         ...exerciseObject,
         log: [...user.log, exerciseObject],
-      };
-
-      console.log("user after update");
-      console.log(user);
-      user
+      }
         .save()
         .then((user) => {
           res
