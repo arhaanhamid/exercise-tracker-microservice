@@ -119,7 +119,7 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
       user.duration = exerciseObject.duration;
       user.date = exerciseObject.date;
       user.log.push(exerciseObject);
-      user.count = user.count ? user.count + 1 : 1;
+      user.count = user.log.length > 0 ? user.log.length + 1 : 1;
 
       user
         .save()
