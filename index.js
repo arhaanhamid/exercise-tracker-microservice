@@ -149,23 +149,19 @@ app.get("/api/users/:_id/logs", (req, res) => {
       // check if user exists or not
       if (!user) return res.json({ status: "User not found" });
 
-      res.json(user);
-
       const fromDate = getDate(req.query.from);
       const toDate = getDate(req.query.to);
       const limit = Number(req.query.limit ? req.query.limit : 0);
       const logs = user.log;
 
-      console.log(logs);
-      console.log(fromDate);
-      console.log(toDate);
-      console.log(limit);
-
       const filteredLogs = logs.filter(
         (log) => new Date(log.date) >= fromDate && new Date(log.date) <= toDate
       );
       const limitedLogs = limit ? filteredLogs.slice(0, limit) : filteredLogs;
-      console.log(limitedLogs);
+
+      user.log = limitedLogs;
+
+      res.json(user);
     })
     .catch((error) => {
       console.log(error);
