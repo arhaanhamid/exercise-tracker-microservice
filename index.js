@@ -107,27 +107,32 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
   // console.log(user);
 
   // UPDATE USER
-  User.findByIdAndUpdate(req.params._id)
-    .then((user) => {
-      user.description = req.body.description;
-      user.duration = req.body.duration;
-      (user.date = req.body.date
-        ? new Date(req.body.date).toDateString()
-        : new Date().toDateString()),
-        user
-          .save()
-          .then((user) => {
-            res.json(user.select("_id username description duration date"));
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-    })
-    .catch((error) => {
-      console.log(error);
-      res.json({ status: "User not found" });
-    });
-
+  User.findByIdAndUpdate(req.params._id).then((user) => {
+    user.description = req.body.description;
+    user.duration = req.body.duration;
+    (user.date = req.body.date
+      ? new Date(req.body.date).toDateString()
+      : new Date().toDateString()),
+      user
+        .save()
+        .then((user) => {
+          res
+            .json({
+              _id: user._id,
+              username: user.username,
+              description: user.description,
+              duration: user.duration,
+              date: user.date,
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          res.json({ status: "User not found" });
+        });
+  });
   // const exercise = new Exercise({
   //   username: user.username,
   //   description: req.body.description,
