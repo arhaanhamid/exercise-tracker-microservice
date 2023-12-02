@@ -151,9 +151,9 @@ app.get("/api/users/:_id/logs", (req, res) => {
 
       res.json(user);
 
-      const fromDate = new Date(req.query.from);
-      const toDate = new Date(req.query.to);
-      const limit = Number(req.query.limit);
+      const fromDate = getDate(req.query.from);
+      const toDate = getDate(req.query.to);
+      const limit = Number(req.query.limit ? req.query.limit : 0);
       const logs = user.log;
 
       console.log(fromDate);
@@ -166,3 +166,10 @@ app.get("/api/users/:_id/logs", (req, res) => {
       res.json({ status: "User not found" });
     });
 });
+
+function getDate(param) {
+  if (!param) return null;
+  const date = new Date(param);
+  if (date.getTime()) return date;
+  return null;
+}
