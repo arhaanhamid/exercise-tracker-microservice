@@ -98,52 +98,48 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
   if (!req.body.description || !req.body.duration)
     res.json({ status: "request descriptionp or duration missing..." });
 
-  const user = await User.findById(req.params._id);
-  if (!user) res.json({ status: "User not found" });
-
-  console.log(user);
-  // user.description = req.body.description;
-  // user.duration = req.body.duration;
-  // console.log(user);
-
   // UPDATE USER
-  User.findByIdAndUpdate(req.params._id).then((user) => {
-    const exerciseObject = {
-      description: req.body.description,
-      duration: req.body.duration,
-      date: req.body.date
-        ? new Date(req.body.date).toDateString()
-        : new Date().toDateString(),
-    };
-    console.log(user);
-    user = {
-      ...user,
-      ...exerciseObject,
-      log: [...user.log, exerciseObject],
-    };
+  User.findByIdAndUpdate(req.params._id)
+    .exec()
+    .then((user) => {
+      if (!user) return res.json({ status: "User not found" });
 
-    console.log("user after update");
-    console.log(user);
-    user
-      .save()
-      .then((user) => {
-        res
-          .json({
-            _id: user._id,
-            username: user.username,
-            description: user.description,
-            duration: user.duration,
-            date: user.date,
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-        res.json({ status: "User not found" });
-      });
-  });
+      const exerciseObject = {
+        description: req.body.description,
+        duration: req.body.duration,
+        date: req.body.date
+          ? new Date(req.body.date).toDateString()
+          : new Date().toDateString(),
+      };
+      console.log(user);
+      user = {
+        ...user,
+        ...exerciseObject,
+        log: [...user.log, exerciseObject],
+      };
+
+      console.log("user after update");
+      console.log(user);
+      user
+        .save()
+        .then((user) => {
+          res
+            .json({
+              _id: user._id,
+              username: user.username,
+              description: user.description,
+              duration: user.duration,
+              date: user.date,
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          res.json({ status: "User not found" });
+        });
+    });
   // const exercise = new Exercise({
   //   username: user.username,
   //   description: req.body.description,
