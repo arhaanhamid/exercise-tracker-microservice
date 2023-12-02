@@ -30,7 +30,6 @@ const userSchema = new mongoose.Schema({
   count: Number,
   log: [
     {
-      _id: false,
       description: String,
       duration: Number,
       date: String,
@@ -125,17 +124,13 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
       user
         .save()
         .then((user) => {
-          res
-            .json({
-              _id: user._id,
-              username: user.username,
-              description: user.description,
-              duration: user.duration,
-              date: user.date,
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+          res.json({
+            _id: user._id,
+            username: user.username,
+            description: user.description,
+            duration: user.duration,
+            date: user.date,
+          });
         })
         .catch((error) => {
           console.log(error);
