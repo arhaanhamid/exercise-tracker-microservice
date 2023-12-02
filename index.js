@@ -103,15 +103,15 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
   // const user = await User.findById(req.params._id);
   // if (!user) res.json({ status: "User not found" });
   // UPDATE USER
-  User.findByIdAndUpdate(req.params._id)
-    .then((user) => {
-      user.description = req.body.description;
-      user.duration = req.body.duration;
-    })
-    .catch((error) => {
-      console.log(error);
-      res.json({ status: "User not found" });
-    });
+  // User.findByIdAndUpdate(req.params._id)
+  //   .then((user) => {
+  //     user.description = req.body.description;
+  //     user.duration = req.body.duration;
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //     res.json({ status: "User not found" });
+  //   });
 
   // const exercise = new Exercise({
   //   username: user.username,
