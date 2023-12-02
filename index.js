@@ -59,7 +59,7 @@ app.post("/api/users", (req, res) => {
     User.findOne({ username: req.body.username }).then((user) => {
       // create a new user if not exists
       if (!user) {
-        const newUser = new User({ username: req.body.username });
+        const newUser = new User({ username: req.body.username, count: 0 });
         newUser
           .save()
           .then((user) => {
